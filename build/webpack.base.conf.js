@@ -11,7 +11,7 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
-  output: {
+  output: { // 打包输出为一个.js文件
     path: config.build.assetsRoot,
     filename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
@@ -19,7 +19,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    extensions: ['.js', '.vue', '.json'], // 自动补全此类的文件路径
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -29,7 +29,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
+        loader: 'eslint-loader', // 对某些类型的文件，使用loader进行处理编译
         enforce: "pre",
         include: [resolve('src'), resolve('test')],
         options: {
@@ -38,13 +38,13 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader',
+        loader: 'vue-loader', // 对vue文件使用vue-loader做处理
         options: vueLoaderConfig
       },
       {
         test: /\.js$/,
-        loader: 'babel-loader',
-        include: [resolve('src'), resolve('test')]
+        loader: 'babel-loader', // 对js文件使用babel-loader做处理
+        include: [resolve('src'), resolve('test')] // 包括哪些文件目录，exclude为排除哪些目录node_moudles
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

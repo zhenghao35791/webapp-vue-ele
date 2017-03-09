@@ -1,14 +1,19 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <!--总指令入口，去找router文件下的index.js-->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+//  import Hello from '@/components/Hello'
+  export default {
+    name: 'app'
+    /* components: {
+      Hello
+    } */
+  }
 </script>
 
 <style>

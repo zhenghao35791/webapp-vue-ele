@@ -15,18 +15,18 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
   : require('./webpack.dev.conf')
 
 // default port where dev server listens for incoming traffic
-var port = process.env.PORT || config.dev.port
+var port = process.env.PORT || config.dev.port  // 定义端口号，在config的index.js里的dev变量
 // automatically open browser, if not set will be false
 var autoOpenBrowser = !!config.dev.autoOpenBrowser
 // Define HTTP proxies to your custom API backend
 // https://github.com/chimurai/http-proxy-middleware
-var proxyTable = config.dev.proxyTable
+var proxyTable = config.dev.proxyTable  // 需要代理的接口，在config的index.js里的dev变量proxyTable
 
 var app = express()
-var compiler = webpack(webpackConfig)
+var compiler = webpack(webpackConfig)  // 传入config编译
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
-  publicPath: webpackConfig.output.publicPath,
+  publicPath: webpackConfig.output.publicPath,  // 静态资源的访问目录
   quiet: true
 })
 
@@ -41,7 +41,7 @@ compiler.plugin('compilation', function (compilation) {
   })
 })
 
-// proxy api requests
+// proxy api requests // 接口转发相关
 Object.keys(proxyTable).forEach(function (context) {
   var options = proxyTable[context]
   if (typeof options === 'string') {
@@ -70,7 +70,7 @@ devMiddleware.waitUntilValid(function () {
   console.log('> Listening at ' + uri + '\n')
 })
 
-module.exports = app.listen(port, function (err) {
+module.exports = app.listen(port, function (err) { // 启动express，监听8080端口
   if (err) {
     console.log(err)
     return
