@@ -1,7 +1,16 @@
 # vue-ele
 
 > A Vue.js project
-
+>
+ "dependencies": {
+    "css-loader": "^0.26.4",
+    "less": "^2.7.2",
+    "less-loader": "^3.0.0",
+    "style-loader": "^0.13.2",
+    "vue": "^2.2.1",
+    "vue-router": "^2.3.0",
+    "vue-style-loader": "^2.0.3"
+  }
 ## Build Setup
 
 ``` bash
