@@ -19,7 +19,6 @@ export default new Router({
     // 定义router路由，compont就是import进来的组件
     {
       path: '/goods',
-      name: 'goods',
       component: Goods
     },
     {
