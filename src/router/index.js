@@ -39,5 +39,4 @@ const router = new Router({
     }
   ]
 });
-// router.go('/goods');
 export default router;
