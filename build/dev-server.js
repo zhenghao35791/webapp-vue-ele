@@ -25,6 +25,38 @@ var proxyTable = config.dev.proxyTable  // 需要代理的接口，在config的i
 var app = express()
 var compiler = webpack(webpackConfig)  // 传入config编译
 
+//新增:模拟接口调用,mock模拟后台数据开始
+var appData = require('../data.json');
+console.log(appData);
+//商家数据,商品数据，rate数据，从接口返回值取。
+var seller = appData.seller;
+var goods = appData.goods;
+var ratings = appData.ratings;
+//express路由
+var apiRoutes = express.Router();
+//模拟接口调用
+apiRoutes.get('/seller',function(req,res){
+  res.json({
+    errno: 0,
+    data: seller
+  })
+});
+apiRoutes.get('/goods',function(req,res){
+  res.json({
+    errno: 0,
+    data: goods
+  })
+});
+apiRoutes.get('/ratings',function(req,res){
+  res.json({
+    errno: 0,
+    data: ratings
+  })
+});
+//接口相关的路由都是使用/api
+app.use('/api',apiRoutes);
+//mock模拟后台数据结束
+
 var devMiddleware = require('webpack-dev-middleware')(compiler, {
   publicPath: webpackConfig.output.publicPath,  // 静态资源的访问目录
   quiet: true

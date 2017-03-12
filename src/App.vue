@@ -1,28 +1,47 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <!--总指令入口，去找router文件下的index.js-->
-    <router-view></router-view>
-  </div>
+    <div id="app">
+        <!--总指令入口，去找router文件下的index.js-->
+        <eleHeader></eleHeader>
+        <div class="tab">
+            <router-link class="tab-item" to="/goods">商品</router-link>
+            <router-link class="tab-item" to="/ratings">评论</router-link>
+            <router-link class="tab-item" to="/seller">商家</router-link>
+        </div>
+        <!-- 路由出口 -->
+        <!-- 路由匹配到的组件将渲染在这里 -->
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
-//  import Hello from '@/components/Hello'
-  export default {
-    name: 'app'
-    /* components: {
-      Hello
-    } */
-  }
+    /* // 默认原始的js内容
+     import Hello from '@/components/Hello';
+     export default {
+     name: 'app',
+     components: {
+     Hello
+     }
+     }; */
+    import eleHeader from './components/header/header.vue';
+
+    export default {
+        components: {
+            eleHeader: eleHeader
+        }
+    };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="less" rel="stylesheet/less">
+    .tab {
+        display: flex;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+
+    .tab-item {
+        flex: 1;
+        text-align: center;
+    }
+
+    }
 </style>
