@@ -22,7 +22,7 @@
      Hello
      }
      }; */
-    import eleHeader from './components/header/header.vue';
+    import eleHeader from './components/header/header';
 
     export default {
         components: {
@@ -37,11 +37,17 @@
         width: 100%;
         height: 40px;
         line-height: 40px;
-
-    .tab-item {
-        flex: 1;
-        text-align: center;
-    }
-
+        .tab-item {
+            flex: 1;
+            text-align: center;
+        }
+        a {
+            display: block;
+            font-size: 14px;
+            color: rgb(77,85,93);
+        }
+        .active {
+            color: red;
+        }
     }
 </style>
