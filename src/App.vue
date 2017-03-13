@@ -2,7 +2,7 @@
     <div id="app">
         <!--总指令入口，去找router文件下的index.js-->
         <eleHeader></eleHeader>
-        <div class="tab">
+        <div class="tab border-1px">
             <router-link class="tab-item" to="/goods">商品</router-link>
             <router-link class="tab-item" to="/ratings">评论</router-link>
             <router-link class="tab-item" to="/seller">商家</router-link>
@@ -32,11 +32,14 @@
 </script>
 
 <style lang="less" rel="stylesheet/less">
+    @import './common/css/func.less';
+
     .tab {
         display: flex;
         width: 100%;
         height: 40px;
         line-height: 40px;
+        .border-1px(rgba(7,17,27,0.1));
         .tab-item {
             flex: 1;
             text-align: center;
