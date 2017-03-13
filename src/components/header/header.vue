@@ -22,8 +22,18 @@
                     </span>
                 </div>
             </div>
+            <div v-if="seller.supports"  class="support-count">
+                <span class="support-count-span">{{seller.supports.length}}个</span>
+                <i class="icon-keyboard_arrow_right"></i>
+            </div>
         </div>
-        <div class="announcement-wrapper"></div>
+        <div class="announcement-wrapper">
+            <span class="announcement-title"></span><span class="announcement-text">{{seller.bulletin}}</span>
+            <i class="icon-keyboard_arrow_right"></i>
+        </div>
+        <div class="header-background">
+            <img :src="seller.avatar" width="100%" height="100%" alt="背景图"/>
+        </div>
     </div>
 </template>
 
@@ -51,9 +61,11 @@
         }
     }
     .header{
+        position: relative;
+        background: rgba(7, 17, 27, 0.5);
         color: #ffffff;
-        background-color: grey;
         .header-content-wrapper{
+            position: relative;
             padding: 24px 12px 18px 24px;
             font-size:0; /*设置wrapper的font为0，消除avatar和content中间的空白间隙*/
             .header-avatar{
@@ -96,7 +108,8 @@
                         vertical-align: top;
                         width: 12px;
                         height: 12px;
-                        margin-bottom: 2px;
+                        line-height: 12px;
+                        margin-right: 4px;
                         background-size: 12px 12px;
                         background-repeat: no-repeat;
                         &.decrease{
@@ -116,11 +129,76 @@
                          };
                     }
                     .header-text{
+                        display: inline-block;
+                        vertical-align: top;
                         line-height: 12px;
                         font-size: 10px;
                     }
                 }
             }
+            .support-count{
+                position: absolute;
+                right: 12px;
+                bottom: 14px;
+                padding:0 8px;
+                height:24px;
+                line-height: 24px;
+                border-radius: 14px;
+                background: rgba(0 ,0 ,0 ,0.2);
+                text-align: center;
+                .support-count-span{
+                    vertical-align: top;
+                    font-size: 10px;
+                }
+                .icon-keyboard_arrow_right{
+                    margin-left: 2px;
+                    line-height: 24px;
+                    font-size: 10px;
+                }
+            }
+        }
+        .announcement-wrapper{
+            position: relative;
+            height: 28px;
+            line-height: 28px;
+            padding: 0 22px 0 12px;
+            background: rgba(7, 17, 27, 0.2);
+            /*超出部分用...表示的css样式，三样*/
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            .announcement-title{
+                display: inline-block;
+                margin-top: 7px;
+                vertical-align: top;
+                width: 22px;
+                height: 12px;
+                background-size: 22px 12px;
+                background-repeat: no-repeat;
+                .bg-image('bulletin');
+            }
+            .announcement-text{
+                margin: 0 4px 0 4px;
+                vertical-align: top;
+                font-size: 10px;
+            }
+            .icon-keyboard_arrow_right{
+                position: absolute;
+                right: 12px;
+                top: 8px;
+                font-size: 10px;
+            }
+        }
+        .header-background{
+            /*header撑满的背景图,利用绝对定位撑满和zindex-1*/
+            position: absolute;
+            top:0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /*背景图滤镜的效果*/
+            filter: blur(10px);
         }
     }
 </style>
