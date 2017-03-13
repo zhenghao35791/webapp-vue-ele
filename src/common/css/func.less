@@ -12,3 +12,11 @@
     content:'';
   }
 }
+.bg-image(@url){
+  background-image: url("@{url}@2x.png");
+  /*@media only screen and (-webkit-min-device-pixel-ratio: 3),
+  only screen and (min--moz-device-pixel-ratio: 3)
+  {
+    backgoud-image: url(@url + '3x.png');
+  }*/
+}

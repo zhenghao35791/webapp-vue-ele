@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <!--总指令入口，去找router文件下的index.js-->
-        <eleHeader></eleHeader>
+        <eleHeader :seller="seller"></eleHeader>
         <div class="tab border-1px">
             <router-link class="tab-item" to="/goods">商品</router-link>
             <router-link class="tab-item" to="/ratings">评论</router-link>
@@ -13,7 +13,7 @@
     </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
     /* // 默认原始的js内容
      import Hello from '@/components/Hello';
      export default {
@@ -25,6 +25,24 @@
     import eleHeader from './components/header/header';
 
     export default {
+        data() {
+            return {
+                seller: {}
+            };
+        },
+        // 钩子函数
+        created() {
+            this.$http.get('/api/seller').then(response => {
+                response = response.body;
+                if (response.errno === 0) {
+                    this.seller = response.data;
+                    console.log('seller: ' + this.seller);
+                    console.log('seller name: ' + this.seller.name);
+                }
+            }, response => {
+                console.log('error');
+            });
+        },
         components: {
             eleHeader: eleHeader
         }
