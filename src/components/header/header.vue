@@ -42,9 +42,31 @@
                     <div class="star-wrapper">
                         <star :size="48" :score="seller.score"></star>
                     </div>
+                    <div class="header-title">
+                        <div class="header-line"></div>
+                        <div class="header-text">优惠信息</div>
+                        <div class="header-line"></div>
+                    </div>
+                    <ul v-if="seller.supports" class="header-discount">
+                        <li class="support-item" v-for="(item,index) in seller.supports">
+                            <span class="support-icon"
+                                  :class="classMap[seller.supports[index].type]"
+                                    >
+                            </span>
+                            <span class="support-text">{{seller.supports[index].description}}</span>
+                        </li>
+                    </ul>
+                    <div class="header-title">
+                        <div class="header-line"></div>
+                        <div class="header-text">商家公告</div>
+                        <div class="header-line"></div>
+                    </div>
+                    <div class="header-bulletin">
+                        <p class="header-bulletin-content">{{seller.bulletin}}</p>
+                    </div>
                 </div>
             </div>
-            <div class="header-detail-close">
+            <div class="header-detail-close" @click="hideDetail()">
                 <i class="icon-close"></i>
             </div>
         </div>
@@ -67,6 +89,9 @@
         methods: {
             showDetail: function() {
                 this.detailShow = true;
+            },
+            hideDetail: function() {
+                this.detailShow = false;
             }
         },
         created() {
@@ -84,6 +109,23 @@
 /*
     @import '../../common/css/func.less';
 */
+    .bg-image-func(@num){
+        &.decrease{
+         .bg-image('decrease_@{num}');
+         };
+        &.discount{
+         .bg-image('discount_@{num}');
+         };
+        &.guarantee{
+         .bg-image('guarantee_@{num}');
+         };
+        &.invoice{
+         .bg-image('invoice_@{num}');
+         };
+        &.special{
+         .bg-image('special_@{num}');
+         };
+    }
     .bg-image(@url){
         background-image: url("@{url}@2x.png");
         @media only screen and (-webkit-min-device-pixel-ratio: 3),
@@ -145,21 +187,7 @@
                         margin-right: 4px;
                         background-size: 12px 12px;
                         background-repeat: no-repeat;
-                        &.decrease{
-                            .bg-image('decrease_1');
-                         };
-                        &.discount{
-                         .bg-image('discount_1');
-                         };
-                        &.guarantee{
-                         .bg-image('guarantee_1');
-                         };
-                        &.invoice{
-                         .bg-image('invoice_1');
-                         };
-                        &.special{
-                         .bg-image('special_1');
-                         };
+                        .bg-image-func(1)
                     }
                     .header-text{
                         display: inline-block;
@@ -242,6 +270,12 @@
             width: 100%;
             height: 100%;
             background: rgba(7, 17, 27, 0.8);
+            .fade-enter-active, .fade-leave-active {
+                transition: opacity .5s
+            }
+            .fade-enter, .fade-leave-active {
+                opacity: 0
+            }
             .header-detail-wrapper{
                 /* 最小高度要撑满屏幕 detail-close的padding才能根据满屏幕 */
                 min-height:100%;
@@ -261,6 +295,22 @@
                         padding: 2px 0;
                         text-align: center;
                     }
+                    .header-title{
+                        display: flex;
+                        width: 80%;
+                        margin: 28px auto 24px auto;
+                        .header-line{
+                            flex: 1;
+                            position: relative;
+                            top: -6px;
+                            border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+                        }
+                        .header-text{
+                            padding: 0 12px;
+                            font-size: 14px;
+                            font-weight: 700;
+                        }
+                    }
                 }
             }
             .header-detail-close{
@@ -275,7 +325,44 @@
                 font-size: 32px;
             }
         }
-
+        /*优惠信息往下的样式*/
+        .header-discount{
+            width: 80%;
+            margin: 0 auto;
+            .support-item{
+                padding: 0 12px;
+                margin-bottom: 12px;
+                font-size:0;
+                &:last-child{
+                     margin-bottom: 0;
+                 }
+                .support-icon{
+                    display: inline-block;
+                    margin-right: 6px;
+                    height: 16px;
+                    width: 16px;
+                    vertical-align: top;
+                    background-size: 16px 16px;
+                    background-repeat:no-repeat;
+                    .bg-image-func(2)
+                }
+                .support-text{
+                    line-height: 16px;
+                    font-size: 12px;
+                    font-weight: 200;
+                    color:rgb(255, 255, 255);
+                }
+            }
+        }
+        .header-bulletin{
+            width: 80%;
+            margin: 0 auto;
+            .header-bulletin-content{
+                padding:0 12px;
+                line-height: 24px;
+                font-size: 12px;
+            }
+        }
     }
 </style>
 
