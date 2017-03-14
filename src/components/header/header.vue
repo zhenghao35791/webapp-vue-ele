@@ -38,7 +38,10 @@
             <!--sticky-footer布局-->
             <div class="header-detail-wrapper clearfix">
                 <div class="header-detail-main">
-
+                    <h1 class="detail-main-title">{{seller.name}}</h1>
+                    <div class="star-wrapper">
+                        <star :size="48" :score="seller.score"></star>
+                    </div>
                 </div>
             </div>
             <div class="header-detail-close">
@@ -49,6 +52,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+    // 引入star组件，这里的star对象就对应组件star里面的export default对象
+    import star from '../star/star';
+
     export default{
         // 子组件要显式地用 props 选项声明它期待获得的数据：
         props: ['seller'],
@@ -66,6 +72,10 @@
         created() {
             // 创建组件的时候定义classMap，对应seller.supports.type里面的0，1，2，3，4顺序，找到图片名称
             this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+        },
+        components: {
+            // 注册star组件
+            star: star
         }
     };
 </script>
@@ -235,10 +245,22 @@
             .header-detail-wrapper{
                 /* 最小高度要撑满屏幕 detail-close的padding才能根据满屏幕 */
                 min-height:100%;
+                width:100%;
                 .header-detail-main{
                     margin-top: 64px;
                     /*sticky-footer 很重要的padding-bottom，给底部X的小图标留有64px的空间*/
                     padding-bottom: 64px;
+                    .detail-main-title{
+                        line-height: 16px;
+                        text-align: center;
+                        font-size: 16px;
+                        font-weight: 700;
+                    }
+                    .star-wrapper{
+                        margin-top: 18px;
+                        padding: 2px 0;
+                        text-align: center;
+                    }
                 }
             }
             .header-detail-close{
