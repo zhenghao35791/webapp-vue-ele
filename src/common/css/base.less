@@ -1,3 +1,11 @@
-.border-1px{
-
+.clearfix{
+  display: inline-block;
+  &:after{
+    display: block;
+    content: '.';
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
+  }
 }

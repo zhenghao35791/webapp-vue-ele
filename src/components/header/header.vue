@@ -22,17 +22,28 @@
                     </span>
                 </div>
             </div>
-            <div v-if="seller.supports"  class="support-count">
+            <div v-if="seller.supports"  class="support-count" @click="showDetail()">
                 <span class="support-count-span">{{seller.supports.length}}个</span>
                 <i class="icon-keyboard_arrow_right"></i>
             </div>
         </div>
-        <div class="announcement-wrapper">
+        <div class="announcement-wrapper" @click="showDetail()">
             <span class="announcement-title"></span><span class="announcement-text">{{seller.bulletin}}</span>
             <i class="icon-keyboard_arrow_right"></i>
         </div>
         <div class="header-background">
             <img :src="seller.avatar" width="100%" height="100%" alt="背景图"/>
+        </div>
+        <div v-show="detailShow" class="header-detail">
+            <!--sticky-footer布局-->
+            <div class="header-detail-wrapper clearfix">
+                <div class="header-detail-main">
+
+                </div>
+            </div>
+            <div class="header-detail-close">
+                <i class="icon-close"></i>
+            </div>
         </div>
     </div>
 </template>
@@ -41,8 +52,19 @@
     export default{
         // 子组件要显式地用 props 选项声明它期待获得的数据：
         props: ['seller'],
+        // data是个方法，不是个对象
+        data () {
+            return {
+                detailShow: false
+            };
+        },
+        methods: {
+            showDetail: function() {
+                this.detailShow = true;
+            }
+        },
         created() {
-        // 创建组件的时候定义classMap，对应seller.supports.type里面的0，1，2，3，4顺序，找到图片名称
+            // 创建组件的时候定义classMap，对应seller.supports.type里面的0，1，2，3，4顺序，找到图片名称
             this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
         }
     };
@@ -63,6 +85,7 @@
     .header{
         position: relative;
         background: rgba(7, 17, 27, 0.5);
+        overflow: hidden;
         color: #ffffff;
         .header-content-wrapper{
             position: relative;
@@ -169,7 +192,7 @@
             text-overflow: ellipsis;
             .announcement-title{
                 display: inline-block;
-                margin-top: 7px;
+                margin-top: 8px;
                 vertical-align: top;
                 width: 22px;
                 height: 12px;
@@ -200,6 +223,37 @@
             /*背景图滤镜的效果*/
             filter: blur(10px);
         }
+        .header-detail{
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: auto;
+            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 17, 27, 0.8);
+            .header-detail-wrapper{
+                /* 最小高度要撑满屏幕 detail-close的padding才能根据满屏幕 */
+                min-height:100%;
+                .header-detail-main{
+                    margin-top: 64px;
+                    /*sticky-footer 很重要的padding-bottom，给底部X的小图标留有64px的空间*/
+                    padding-bottom: 64px;
+                }
+            }
+            .header-detail-close{
+                /*sticky-footer*/
+                position: relative;
+                clear: both;
+                /*sticky-footer 通过负的margin把图标向上提*/
+                margin: -64px auto 0 auto;
+                width: 32px;
+                height: 32px;
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 32px;
+            }
+        }
+
     }
 </style>
 
