@@ -34,48 +34,23 @@
         <div class="header-background">
             <img :src="seller.avatar" width="100%" height="100%" alt="背景图"/>
         </div>
-        <div v-show="detailShow" class="header-detail">
-            <!--sticky-footer布局-->
-            <div class="header-detail-wrapper clearfix">
-                <div class="header-detail-main">
-                    <h1 class="detail-main-title">{{seller.name}}</h1>
-                    <div class="star-wrapper">
-                        <star :size="48" :score="seller.score"></star>
-                    </div>
-                    <div class="header-title">
-                        <div class="header-line"></div>
-                        <div class="header-text">优惠信息</div>
-                        <div class="header-line"></div>
-                    </div>
-                    <ul v-if="seller.supports" class="header-discount">
-                        <li class="support-item" v-for="(item,index) in seller.supports">
-                            <span class="support-icon"
-                                  :class="classMap[seller.supports[index].type]"
-                                    >
-                            </span>
-                            <span class="support-text">{{seller.supports[index].description}}</span>
-                        </li>
-                    </ul>
-                    <div class="header-title">
-                        <div class="header-line"></div>
-                        <div class="header-text">商家公告</div>
-                        <div class="header-line"></div>
-                    </div>
-                    <div class="header-bulletin">
-                        <p class="header-bulletin-content">{{seller.bulletin}}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="header-detail-close" @click="hideDetail()">
-                <i class="icon-close"></i>
-            </div>
-        </div>
+        <transition name="slide-fade">
+            <headerWapper :seller="seller"
+                          :detailShow="detailShow"
+                          v-show="detailShow"
+                    >
+            </headerWapper>
+        </transition>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
     // 引入star组件，这里的star对象就对应组件star里面的export default对象
     import star from '../star/star';
+    import headerWapper from './headerWapper';
+    import Vue from 'vue';
+    import Vuex from 'Vuex'; // 使用之前都需要在main.js里面先引用
+    Vue.use(Vuex);
 
     export default{
         // 子组件要显式地用 props 选项声明它期待获得的数据：
@@ -83,32 +58,52 @@
         // data是个方法，不是个对象
         data () {
             return {
-                detailShow: false
+                temp: 'temp'
             };
+        },
+        computed: {
+            detailShow () {
+                return this.$store.state.showType;
+            }
         },
         methods: {
             showDetail: function() {
-                this.detailShow = true;
-            },
-            hideDetail: function() {
-                this.detailShow = false;
+                // 通过vuex改变全局变量state.showType的值
+                this.$store.commit('showWrapper');
             }
         },
         created() {
-            // 创建组件的时候定义classMap，对应seller.supports.type里面的0，1，2，3，4顺序，找到图片名称
+        // 创建组件的时候定义classMap，对应seller.supports.type里面的0，1，2，3，4顺序，找到图片名称
             this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
         },
         components: {
             // 注册star组件
-            star: star
+            star: star,
+            headerWapper: headerWapper
         }
     };
 </script>
 
 <style lang="less" rel="stylesheet/less">
-/*
-    @import '../../common/css/func.less';
-*/
+    /*过渡效果css*/
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity 5s;
+        opacity: 1
+    }
+    .fade-enter, .fade-leave {
+        transition: opacity 5s;
+        opacity: 0.2
+    }
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-active {
+        transform: translateX(10px);
+        opacity: 0;
+    }
     .bg-image-func(@num){
         &.decrease{
          .bg-image('decrease_@{num}');
@@ -269,13 +264,9 @@
             z-index: 100;
             width: 100%;
             height: 100%;
+            /*ios上实现detail的模糊背景*/
+            backdrop-filter: blur(10px);
             background: rgba(7, 17, 27, 0.8);
-            .fade-enter-active, .fade-leave-active {
-                transition: opacity .5s
-            }
-            .fade-enter, .fade-leave-active {
-                opacity: 0
-            }
             .header-detail-wrapper{
                 /* 最小高度要撑满屏幕 detail-close的padding才能根据满屏幕 */
                 min-height:100%;

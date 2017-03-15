@@ -36,8 +36,6 @@
                 response = response.body;
                 if (response.errno === 0) {
                     this.seller = response.data;
-                    console.log('seller: ' + this.seller);
-                    console.log('seller name: ' + this.seller.name);
                 }
             }, response => {
                 console.log('error');
