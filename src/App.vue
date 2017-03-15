@@ -22,6 +22,7 @@
      Hello
      }
      }; */
+    const ERROR_OR = 0;
     import eleHeader from './components/header/header';
 
     export default {
@@ -34,7 +35,7 @@
         created() {
             this.$http.get('/api/seller').then(response => {
                 response = response.body;
-                if (response.errno === 0) {
+                if (response.errno === ERROR_OR) {
                     this.seller = response.data;
                 }
             }, response => {
