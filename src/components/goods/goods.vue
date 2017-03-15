@@ -1,6 +1,6 @@
 <template>
     <div class="goods">
-        <div class="goods-menu-wrapper">
+        <div class="goods-menu-wrapper" id="menuWrapper">
             <ul>
                 <li v-for="(item,index) in goods" class="goods-menu-item">
                     <span class="goods-text">
@@ -13,7 +13,7 @@
                 </li>
             </ul>
         </div>
-        <div class="goods-foods-wrapper">
+        <div class="goods-foods-wrapper" id="foodsWrapper">
             <ul>
                 <li v-for="item in goods" class="goods-food-list">
                     <h1 class="food-title">{{item.name}}</h1>
@@ -26,12 +26,10 @@
                                 <h2 class="food-name">{{food.name}}</h2>
                                 <p class="food-desc">{{food.description}}</p>
                                 <div class="extra">
-                                    <span class="goods-sales">月售{{food.sellCount}}份</span>
-                                    <span>好评率{{food.rating}}%</span>
+                                    <span class="goods-sales">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
                                 </div>
                                 <div class="price">
-                                    <span class="food-now-price">{{food.price}}元</span>
-                                    <span class="food-old-price" v-show="food.oldPrice">{{food.oldPrice}}元</span>
+                                    <span class="food-now-price">{{food.price}}元</span><span class="food-old-price" v-show="food.oldPrice">{{food.oldPrice}}元</span>
                                 </div>
                             </div>
 
@@ -44,6 +42,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+    import BScroll from 'better-scroll';
     const ERROR_OR = 0;
 
     export default{
@@ -61,7 +60,16 @@
             */
         },
         methods: {
-
+            _initScroll: function() {
+                this.menuScroll = new BScroll(document.getElementById('menuWrapper'), {
+                    startX: 0,
+                    startY: 0
+                });
+                this.foodsScroll = new BScroll(document.getElementById('foodsWrapper'), {
+                    startX: 0,
+                    startY: 0
+                });
+            }
         },
         created() {
             this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
@@ -70,6 +78,11 @@
                 response = response.body;
                 if (response.errno === ERROR_OR) {
                     this.goods = response.data;
+                    this.$nextTick(function () {
+                        // DOM 更新了
+                        // vue更新dom是异步的，计算高度有问题，把它放入到下一个tick中执行
+                        this._initScroll();
+                    });
                 }
             }, response => {
                 console.log('error');
@@ -185,7 +198,7 @@
                     }
                     .food-desc{
                         margin-bottom: 8px;
-                        line-height: 10px;
+                        line-height: 12px;
                         font-size: 10px;
                         color: rgb(147, 153, 159);
                     }
