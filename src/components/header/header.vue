@@ -16,7 +16,10 @@
                 <!--如果不先判断seller.supports是否为空，会报错-->
                 <!--因为create是异步的，seller对象还是空的时候就去尝试取【0】，报错undefined-->
                 <div v-if="seller.supports" class="header-support">
+<!--
                     <span class="header-icon" :class="classMap[seller.supports[0].type]"></span>
+-->
+                    <support-icon :seller="seller" :index="0"  class="header-icon"></support-icon>
                     <span class="header-text">
                         {{seller.supports[0].description}}
                     </span>
@@ -48,6 +51,7 @@
     // 引入star组件，这里的star对象就对应组件star里面的export default对象
     import star from '../star/star';
     import headerWapper from './headerWapper';
+    import supportIcon from '../config/supportIcon';
     import Vue from 'vue';
     import Vuex from 'Vuex'; // 使用之前都需要在main.js里面先引用
     Vue.use(Vuex);
@@ -79,7 +83,8 @@
         components: {
             // 注册star组件
             star: star,
-            headerWapper: headerWapper
+            headerWapper: headerWapper,
+            supportIcon: supportIcon
         }
     };
 </script>
@@ -327,16 +332,6 @@
                 &:last-child{
                      margin-bottom: 0;
                  }
-                .support-icon{
-                    display: inline-block;
-                    margin-right: 6px;
-                    height: 16px;
-                    width: 16px;
-                    vertical-align: top;
-                    background-size: 16px 16px;
-                    background-repeat:no-repeat;
-                    .bg-image-func(2)
-                }
                 .support-text{
                     line-height: 16px;
                     font-size: 12px;
