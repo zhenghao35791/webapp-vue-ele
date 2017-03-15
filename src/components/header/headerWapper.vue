@@ -17,7 +17,7 @@
                           :class="classMap[seller.supports[index].type]"
                             >
                     </span>-->
-                    <support-icon :seller="seller" :index="index"  class="support-icon"></support-icon>
+                    <support-icon :data="seller" :index="index"  class="support-icon"></support-icon>
                         <span class="support-text">{{seller.supports[index].description}}</span>
                     </li>
                 </ul>

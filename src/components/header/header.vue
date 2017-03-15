@@ -19,7 +19,7 @@
 <!--
                     <span class="header-icon" :class="classMap[seller.supports[0].type]"></span>
 -->
-                    <support-icon :seller="seller" :index="0"  class="header-icon"></support-icon>
+                    <support-icon :data="seller" :index="0"  class="header-icon"></support-icon>
                     <span class="header-text">
                         {{seller.supports[0].description}}
                     </span>
