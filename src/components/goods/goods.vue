@@ -2,7 +2,10 @@
     <div class="goods">
         <div class="goods-menu-wrapper" id="menuWrapper">
             <ul>
-                <li v-for="(item,index) in goods" class="goods-menu-item">
+                <li v-for="(item,index) in goods"
+                    class="goods-menu-item"
+                    :class="{'current':currentIndex===index}"
+                    @click="selectMenu(index, $event)">
                     <span class="goods-text">
                         <span :class="classMap[item.type]"
                               class="goods-icon"
@@ -15,7 +18,7 @@
         </div>
         <div class="goods-foods-wrapper" id="foodsWrapper">
             <ul>
-                <li v-for="item in goods" class="goods-food-list">
+                <li v-for="item in goods" class="goods-food-list food-list-hook">
                     <h1 class="food-title">{{item.name}}</h1>
                     <ul>
                         <li v-for="food in item.foods" class="goods-food-item ">
@@ -32,43 +35,81 @@
                                     <span class="food-now-price">{{food.price}}元</span><span class="food-old-price" v-show="food.oldPrice">{{food.oldPrice}}元</span>
                                 </div>
                             </div>
-
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
+        <shop-chat></shop-chat>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
     import BScroll from 'better-scroll';
+    import shopChat from '../shopChat/shopChat';
     const ERROR_OR = 0;
 
     export default{
         // props: ['goods'],
         data() {
             return {
-                goods: {}
+                goods: {},
+                listHeight: [],
+                scrollY: 0
             };
         },
-        computerd: {
-            /*
-            detailShow () {
-                return this.$store.state.showType;
+        computed: {
+            currentIndex () {
+                /*
+                * 定义前一个高度为A，下一个高度为B
+                * if ！heightB，若for循环进行到最后，i的值会是undefined，说明滚动到了最末端
+                * 如果没有滚动到最末端，当前高度scrollY在A和B高度之间时，返回listHeight【i】，得知foodList的当前dom
+                * 如果for循环结束，if语句都没有执行，说明屏幕没有滚动过，return0
+                * */
+                for (var i = 0; i < this.listHeight.length; i++) {
+                    let heightA = this.listHeight[i];
+                    let heightB = this.listHeight[i + 1];
+                    if ((!heightB) || (this.scrollY < heightB && this.scrollY >= heightA)) {
+                        return i;
+                    }
+                }
+                return 0;
             }
-            */
         },
         methods: {
+            selectMenu(index, event) {
+                // 阻止原生的click事件调用
+                if (!event._constructed) {
+                    return;
+                }
+                let foodList = document.getElementsByClassName('food-list-hook');
+                let el = foodList[index];
+                this.foodsScroll.scrollToElement(el, 300);
+            },
             _initScroll: function() {
                 this.menuScroll = new BScroll(document.getElementById('menuWrapper'), {
-                    startX: 0,
-                    startY: 0
+                    click: true
                 });
                 this.foodsScroll = new BScroll(document.getElementById('foodsWrapper'), {
-                    startX: 0,
-                    startY: 0
+                    probeType: 3 // scroll在滚动的时候可以暴露出的滚动位置
                 });
+                // 监听scroll事件，pos是this.foodsScroll暴露出的滚动位置,dom滚动的时候把高度赋值给scrollY
+                this.foodsScroll.on('scroll', (pos) => {
+                    this.scrollY = Math.abs(Math.round(pos.y));
+                });
+            },
+            _calHeight: function() {
+                // 取得foodlist的dom
+                var foodList = document.getElementsByClassName('food-list-hook');
+                var height = 0;
+                this.listHeight.push(height); // 把初始高度放入这个数组
+
+                for (var i = 0; i < foodList.length; i++) {
+                    var item = foodList[i]; // 拿到每一个foodList dom
+                    height += item.clientHeight; // 拿到每一个dom的高度
+                    this.listHeight.push(height); // 把每一个dom的高度放入这个数组
+                }
+                console.log('this.listHeight: ' + this.listHeight);
             }
         },
         created() {
@@ -82,6 +123,7 @@
                         // DOM 更新了
                         // vue更新dom是异步的，计算高度有问题，把它放入到下一个tick中执行
                         this._initScroll();
+                        this._calHeight();
                     });
                 }
             }, response => {
@@ -89,6 +131,7 @@
             });
         },
         components: {
+            shopChat: shopChat
         }
     };
 </script>
@@ -115,6 +158,16 @@
                 height: 54px;
                 width: 56px;
                 line-height: 14px;
+                &.current{
+                    position: relative;
+                    z-index: 10;
+                    margin-top: -1px;
+                    background: #fff;
+                    font-weight: 700;
+                    .goods-text{
+                        .border-1px(rgba(7, 17, 27, 0))
+                    }
+                 }
                 /*icon 样式，待抽成组件*/
                 .bg-image(@url){
                     background-image: url("@{url}@2x.png");
