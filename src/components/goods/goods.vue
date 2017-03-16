@@ -40,7 +40,10 @@
                 </li>
             </ul>
         </div>
-        <shop-chat></shop-chat>
+        <shopChat
+                  :deliveryPrice="seller.deliveryPrice"
+                  :minPrice="seller.minPrice">
+        </shopChat>
     </div>
 </template>
 
@@ -50,6 +53,15 @@
     const ERROR_OR = 0;
 
     export default{
+        /* 在app.vue中<router-view :seller="seller"></router-view>
+        通过router把seller传给goods
+        再通过goods把seller对象传给子组件shopchart
+        * */
+        props: {
+            seller: {
+                type: Object
+            }
+        },
         // props: ['goods'],
         data() {
             return {

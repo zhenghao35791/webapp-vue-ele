@@ -8,10 +8,10 @@
                     </div>
                     <div class="num"></div>
                 </div>
-                <div class="price">元</div>
-                <div class="desc">另需配送费元</div>
+                <div class="price">0 元</div>
+                <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
             </div>
-            <div class="content-right" @click.stop.prevent="pay">
+            <div class="content-right">
                 <div class="pay">起送
                 </div>
             </div>
@@ -20,7 +20,16 @@
 </template>
 <script type="text/ecmascript-6">
     export default {
-
+        props: {
+            deliveryPrice: {
+                type: Number,
+                default: 0
+            },
+            minPrice: {
+                type: Number,
+                default: 0
+            }
+        }
     };
 </script>
 <style lang="less" rel="stylesheet/less">
@@ -74,9 +83,15 @@
                     border-right: 1px solid rgba(255, 255, 255, 0.1);
                     font-size: 16px;
                     font-weight: 700;
+                    color: rgba(255, 255, 255, 0.4);
                 }
                 .desc{
                     display: inline-block;
+                    vertical-align: top;
+                    margin: 12px 0 0 12px;
+                    line-height: 24px;
+                    font-size: 10px;
+                    color: rgba(255, 255, 255, 0.4);
                 }
             }
             .content-right{
