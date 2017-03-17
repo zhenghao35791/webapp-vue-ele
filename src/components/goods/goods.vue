@@ -34,22 +34,27 @@
                                 <div class="price">
                                     <span class="food-now-price">{{food.price}}元</span><span class="food-old-price" v-show="food.oldPrice">{{food.oldPrice}}元</span>
                                 </div>
+                                <div class="cartcontrol-wrapper">
+                                    <cart-control @add="addFood" :food="food"></cart-control>
+                                </div>
                             </div>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <shopChat
+        <shop-chat ref="shopcart"
                   :deliveryPrice="seller.deliveryPrice"
-                  :minPrice="seller.minPrice">
-        </shopChat>
+                  :minPrice="seller.minPrice"
+                  :selectFoods="selectFoods">
+        </shop-chat>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
     import BScroll from 'better-scroll';
     import shopChat from '../shopChat/shopChat';
+    import cartControl from '../cartControl/cartControl';
     const ERROR_OR = 0;
 
     export default{
@@ -86,6 +91,24 @@
                     }
                 }
                 return 0;
+            },
+            // 返回被选过的food
+            selectFoods () {
+                let foods = [];
+                if (this.goods.length) {
+                    this.goods.forEach((good) => {
+                        good.foods.forEach((food) => {
+                            /* 如果food有count属性，说明被点击过
+                               如果count变成了0，food.count是false，将会重新计算属性，把这个count0的food移除
+                               如果count大于0，说明购物车中选择了这个food，push进selectFood数组
+                              */
+                            if (food.count) {
+                                foods.push(food);
+                            }
+                        });
+                    });
+                }
+                return foods;
             }
         },
         methods: {
@@ -103,6 +126,7 @@
                     click: true
                 });
                 this.foodsScroll = new BScroll(document.getElementById('foodsWrapper'), {
+                    click: true,
                     probeType: 3 // scroll在滚动的时候可以暴露出的滚动位置
                 });
                 // 监听scroll事件，pos是this.foodsScroll暴露出的滚动位置,dom滚动的时候把高度赋值给scrollY
@@ -121,7 +145,20 @@
                     height += item.clientHeight; // 拿到每一个dom的高度
                     this.listHeight.push(height); // 把每一个dom的高度放入这个数组
                 }
-                console.log('this.listHeight: ' + this.listHeight);
+             //   console.log('this.listHeight: ' + this.listHeight);
+            },
+            // 事件监听，把target传进来
+            addFood(target) {
+                this._drop(target);
+            },
+            // 私有方法drop，可以调用shopchat.drop方法，通过addFood方法把target传进来
+            // 实现了把cartcontrol里面的dom传递给伏组件goods，父组件再调用子组件的方法
+            _drop(target) {
+                // 体验优化,异步执行下落动画，下一轮再执行
+                this.$nextTick(() => {
+                    // this.$refs访问子组件，再调用drop方法，把target传进去
+                    this.$refs.shopcart.drop(target);
+                });
             }
         },
         created() {
@@ -143,7 +180,8 @@
             });
         },
         components: {
-            shopChat: shopChat
+            shopChat: shopChat,
+            cartControl: cartControl
         }
     };
 </script>
@@ -289,6 +327,11 @@
                             font-size: 10px;
                             color: rgb(147, 153, 159);
                         }
+                    }
+                    .cartcontrol-wrapper{
+                        position: absolute;
+                        right: 0;
+                        bottom: 12px;
                     }
                 }
             }
