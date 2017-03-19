@@ -53,7 +53,7 @@
 
 <script type="text/ecmascript-6">
     import BScroll from 'better-scroll';
-    import shopChat from '../shopChat/shopChat';
+    import shopChat from '../shopCart/shopCart';
     import cartControl from '../cartControl/cartControl';
     const ERROR_OR = 0;
 
