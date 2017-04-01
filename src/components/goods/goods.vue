@@ -169,7 +169,6 @@
                 if (response.errno === ERROR_OR) {
                     this.goods = response.data;
                     this.$nextTick(function () {
-                        // DOM 更新了
                         // vue更新dom是异步的，计算高度有问题，把它放入到下一个tick中执行
                         this._initScroll();
                         this._calHeight();

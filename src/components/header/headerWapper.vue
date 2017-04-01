@@ -43,7 +43,6 @@
     export default{
         // 子组件要显式地用 props 选项声明它期待获得的数据：
         props: ['seller', 'detailShow'],
-        // data是个方法，不是个对象
         data: function () {
             return {
                 temp: 'temp'
@@ -52,8 +51,6 @@
         methods: {
             hideDetail: function() {
                 this.$store.commit('hideWrapper');
-                // console.log(this.$store.state.showType);
-                // console.log(this.detailType);
             }
         },
         components: {
