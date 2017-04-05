@@ -21,7 +21,7 @@
                 <li v-for="item in goods" class="goods-food-list food-list-hook">
                     <h1 class="food-title">{{item.name}}</h1>
                     <ul>
-                        <li v-for="food in item.foods" class="goods-food-item ">
+                        <li @click="selectFood(food,$event)" v-for="food in item.foods" class="goods-food-item ">
                             <div class="food-icon">
                                 <img height="57" width="57" :src="food.icon" alt="food-icon"/>
                             </div>
@@ -48,6 +48,8 @@
                   :minPrice="seller.minPrice"
                   :selectFoods="selectFoods">
         </shop-chat>
+        <!-- 引入food组件  -->
+        <food @add="addFood" :food="selectedFood" ref="food"></food>
     </div>
 </template>
 
@@ -55,6 +57,7 @@
     import BScroll from 'better-scroll';
     import shopChat from '../shopCart/shopCart';
     import cartControl from '../cartControl/cartControl';
+    import food from '../food/food';
     const ERROR_OR = 0;
 
     export default{
@@ -72,7 +75,8 @@
             return {
                 goods: {},
                 listHeight: [],
-                scrollY: 0
+                scrollY: 0,
+                selectedFood: {}
             };
         },
         computed: {
@@ -120,6 +124,13 @@
                 let foodList = document.getElementsByClassName('food-list-hook');
                 let el = foodList[index];
                 this.foodsScroll.scrollToElement(el, 300);
+            },
+            selectFood(food, event) {
+                if (!event._constructed) {
+                    return;
+                }
+                this.selectedFood = food;
+                this.$refs.food.show();
             },
             _initScroll: function() {
                 this.menuScroll = new BScroll(document.getElementById('menuWrapper'), {
@@ -180,7 +191,8 @@
         },
         components: {
             shopChat: shopChat,
-            cartControl: cartControl
+            cartControl: cartControl,
+            food: food
         }
     };
 </script>
