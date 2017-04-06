@@ -67,6 +67,7 @@
     import Vue from 'vue';
     import cartcontrol from '../cartControl/cartControl';
     import split from '../split/split';
+    // export function在引用的时候需要加花括号｛formatDate｝，而export default的不需要加花括号
     import {formatDate} from '../../common/js/date';
     import ratingselect from '../ratingselect/ratingselect';
 
@@ -147,6 +148,7 @@
         filters: {
             formatDate(time) {
                 let date = new Date(time);
+                // 通用的方法抽成一个js模块，放到common/js中，方便调用
                 return formatDate(date, 'yyyy-MM-dd hh:mm');
             }
         },
